@@ -1,21 +1,33 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+/**MutableLiveData vs. LiveData:
+ * --- Data in a MutableLiveData object can be changed, as the name implies.
+ * Inside the ViewModel, the data should be editable, so it uses MutableLiveData.
+ * --- Data in a LiveData object can be read, but not changed. From outside the ViewModel,
+ * data should be readable, but not editable, so the data should be exposed as LiveData.
+ */
 class GameViewModel : ViewModel() {
 
     // The current word
-    val word = MutableLiveData<String>()
+    private val _word = MutableLiveData<String>()
+    val word: LiveData<String>
+        get() = _word
     // The current score
-    val score = MutableLiveData<Int>()
+    private val _score = MutableLiveData<Int>()
+    // A backing property allows you to return something from a getter other than the exact object:
+    val score: LiveData<Int>
+        get() = _score
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
 
     init {
-        word.value = ""
-        score.value = 0
+        _word.value = ""
+        _score.value = 0
         resetList()
         nextWord()
         Log.i("GameViewModel", "GameViewModel created!")
@@ -39,7 +51,7 @@ class GameViewModel : ViewModel() {
     private fun nextWord() {
         if (wordList.isNotEmpty()) {
             //Select and remove a word from the list
-            word.value = wordList.removeAt(0)
+            _word.value = wordList.removeAt(0)
         }
 //        updateWordText()
 //        updateScoreText()
@@ -48,13 +60,13 @@ class GameViewModel : ViewModel() {
     /** Methods for buttons presses **/
     fun onSkip() {
 //        score--
-        score.value = (score.value)?.minus(1)  // performs the subtraction with null-safety
+        _score.value = (score.value)?.minus(1)  // performs the subtraction with null-safety
         nextWord()
     }
 
     fun onCorrect() {
 //        score++
-        score.value = (score.value)?.plus(1)
+        _score.value = (score.value)?.plus(1)
         nextWord()
     }
 

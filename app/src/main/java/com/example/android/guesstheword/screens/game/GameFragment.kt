@@ -26,7 +26,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
@@ -50,8 +49,14 @@ class GameFragment : Fragment() {
                 container,
                 false
         )
+
         Log.i("GameFragment", "Called ViewModelProviders.of")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+
+        // Set the viewmodel for databinding - this allows the bound layout access
+        // to all the data in the ViewModel
+        binding.gameViewModel = viewModel
+
 
         /** Setting up LiveData observation relationship **/
         viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
@@ -65,9 +70,9 @@ class GameFragment : Fragment() {
             if (hasFinished) gameFinished()
         })
 
-        binding.correctButton.setOnClickListener { onCorrect() }
-        binding.skipButton.setOnClickListener { onSkip() }
-        binding.endGameButton.setOnClickListener { onEndGame() }
+//        binding.correctButton.setOnClickListener { onCorrect() }
+//        binding.skipButton.setOnClickListener { onSkip() }
+//        binding.endGameButton.setOnClickListener { onEndGame() }
 
 //        updateScoreText()
 //        updateWordText()
@@ -75,32 +80,32 @@ class GameFragment : Fragment() {
         return binding.root
     }
 
-    /** Methods for buttons presses **/
-    private fun onSkip() {
-        viewModel.onSkip()
-//        updateWordText()
-//        updateScoreText()
-    }
-
-    private fun onCorrect() {
-        viewModel.onCorrect()
-//        updateScoreText()
-//        updateWordText()
-    }
-
-//    /** Methods for updating the UI **/
-//    private fun updateWordText() {
-//        binding.wordText.text = viewModel.word.value
+//    /** Methods for buttons presses **/
+//    private fun onSkip() {
+//        viewModel.onSkip()
+////        updateWordText()
+////        updateScoreText()
 //    }
 //
-//    private fun updateScoreText() {
-//        binding.scoreText.text = viewModel.score.value.toString()
+//    private fun onCorrect() {
+//        viewModel.onCorrect()
+////        updateScoreText()
+////        updateWordText()
 //    }
-
-
-    private  fun onEndGame() {
-        gameFinished()
-    }
+//
+////    /** Methods for updating the UI **/
+////    private fun updateWordText() {
+////        binding.wordText.text = viewModel.word.value
+////    }
+////
+////    private fun updateScoreText() {
+////        binding.scoreText.text = viewModel.score.value.toString()
+////    }
+//
+//
+//    private  fun onEndGame() {
+//        gameFinished()
+//    }
 
     /**
      * Called when the game is finished

@@ -69,13 +69,13 @@ class GameViewModel : ViewModel() {
     /** Methods for buttons presses **/
     fun onSkip() {
 //        score--
-        _score.value = (score.value)?.minus(1)  // performs the subtraction with null-safety
+        _score.value = (_score.value)?.minus(1)  // performs the subtraction with null-safety
         nextWord()
     }
 
     fun onCorrect() {
 //        score++
-        _score.value = (score.value)?.plus(1)
+        _score.value = (_score.value)?.plus(1)
         nextWord()
     }
 
